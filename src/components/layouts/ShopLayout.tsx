@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import { Navbar } from '../ui'
 
 interface Props {
   children: JSX.Element | JSX.Element[]
@@ -19,7 +20,9 @@ const ShopLayout = ({ title, pageDescription, imageFullUrl, children }: Props) =
         {imageFullUrl && <meta name='og:image' content={imageFullUrl} />}
       </Head>
 
-      <nav></nav>
+      <nav>
+        <Navbar />
+      </nav>
 
       <main className='main'>{children}</main>
 
