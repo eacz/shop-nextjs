@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { Navbar } from '../ui'
+import { Navbar, SideMenu } from '../ui'
 
 interface Props {
   children: JSX.Element | JSX.Element[]
@@ -23,6 +23,8 @@ const ShopLayout = ({ title, pageDescription, imageFullUrl, children }: Props) =
       <nav>
         <Navbar />
       </nav>
+
+      <SideMenu />
 
       <main className='main'>{children}</main>
 
