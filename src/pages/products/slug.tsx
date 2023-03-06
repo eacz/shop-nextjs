@@ -3,6 +3,7 @@ import { Grid, Box, Typography, Button, Chip } from '@mui/material'
 import { ProductSlideshow } from '@/components/products'
 import { ShopLayout } from '@/components/layouts'
 import { initialData } from '@/database/products'
+import ItemCounter from '../../components/ui/ItemCounter';
 
 const productTest = initialData.products[0]
 
@@ -23,7 +24,7 @@ const ProductPage = () => {
             </Typography>
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Amount: </Typography>
-              {/* Item counter component */}
+              <ItemCounter />
             </Box>
 
             {/* Add to cart */}
