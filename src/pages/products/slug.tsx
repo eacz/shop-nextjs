@@ -1,9 +1,9 @@
 import { Grid, Box, Typography, Button, Chip } from '@mui/material'
 
-import { ProductSlideshow } from '@/components/products'
+import { ProductSlideshow, SizeSelector } from '@/components/products'
 import { ShopLayout } from '@/components/layouts'
 import { initialData } from '@/database/products'
-import ItemCounter from '../../components/ui/ItemCounter';
+import ItemCounter from '../../components/ui/ItemCounter'
 
 const productTest = initialData.products[0]
 
@@ -25,6 +25,7 @@ const ProductPage = () => {
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Amount: </Typography>
               <ItemCounter />
+              <SizeSelector selectedSize={productTest.sizes[0]} sizes={productTest.sizes} />
             </Box>
 
             {/* Add to cart */}
