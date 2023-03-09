@@ -20,7 +20,7 @@ const CartList = ({ editable = false }: Props) => {
               <Link component='span'>
                 <CardActionArea>
                   <CardMedia
-                    image={`products/${product.images[0]}`}
+                    image={`/products/${product.images[0]}`}
                     component='img'
                     sx={{ borderRadius: 5 }}
                   />
@@ -34,7 +34,7 @@ const CartList = ({ editable = false }: Props) => {
               <Typography variant='body1'>
                 Size: <strong>M</strong>
               </Typography>
-              {editable ? <ItemCounter /> : <Typography variant='h4'>3 Items</Typography>}
+              {editable ? <ItemCounter /> : <Typography sx={{mt: 1}} variant='h5'>3 Items</Typography>}
             </Box>
           </Grid>
           <Grid item xs={2} display='flex' alignItems='center' flexDirection='column'>
