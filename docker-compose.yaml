@@ -1,0 +1,15 @@
+version: '3'
+
+services: 
+  db:
+    image: mongo:5
+    ports: 
+      - 27020:27017
+    environment:
+      MONGODB_DATABASE: teslodb
+      MONGODB_USERNAME: ${MONGO_USERNAME}
+      MONGODB_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongodata:/data/db       
+volumes:
+  mongodata:      
