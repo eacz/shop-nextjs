@@ -1,6 +1,8 @@
-import { ProductList } from '@/components/products'
-import { useProducts } from '@/hooks'
 import { Typography } from '@mui/material'
+
+import { useProducts } from '@/hooks'
+import { ProductList } from '@/components/products'
+import { FullScreenLoading } from '@/components/ui'
 import { ShopLayout } from '../components/layouts'
 
 export default function Home() {
@@ -15,7 +17,7 @@ export default function Home() {
         All the products
       </Typography>
       { isLoading 
-        ? <h1>Loading...</h1> 
+        ? <FullScreenLoading />
         : <ProductList products={products} />
       }
     </ShopLayout>
