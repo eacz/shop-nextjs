@@ -1,15 +1,10 @@
 import { ProductList } from '@/components/products'
+import { useProducts } from '@/hooks'
 import { Typography } from '@mui/material'
 import { ShopLayout } from '../components/layouts'
 
-import useSWR from 'swr'
-const fetcher = (...args: [key: string]) => fetch(...args).then((res) => res.json())
-
 export default function Home() {
-  const { data, error, isLoading } = useSWR('/api/products', fetcher, {})
-
-  if (error) return <div>failed to load</div>
-  if (isLoading) return <div>loading...</div>
+  const {  isLoading, products } = useProducts('/products')
 
   return (
     <ShopLayout title='Teslo-Shop - Home' pageDescription='Find the best Teslo Products'>
@@ -19,7 +14,10 @@ export default function Home() {
       <Typography variant='h2' sx={{ mb: 1 }}>
         All the products
       </Typography>
-      <ProductList products={data} />
+      { isLoading 
+        ? <h1>Loading...</h1> 
+        : <ProductList products={products} />
+      }
     </ShopLayout>
   )
 }
