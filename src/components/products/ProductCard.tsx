@@ -1,7 +1,8 @@
-import { IProduct } from '@/interfaces'
+import { useMemo, useState } from 'react'
 import NextLink from 'next/link'
 import { Grid, Card, CardActionArea, CardMedia, Box, Typography } from '@mui/material'
-import { useMemo, useState } from 'react'
+
+import { IProduct } from '@/interfaces'
 
 interface Props {
   product: IProduct
@@ -12,7 +13,7 @@ const Product = ({ product }: Props) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false)
 
   const productImage = useMemo(() => {
-    return isHovered ? `products/${product.images[1]}` : `products/${product.images[0]}`
+    return isHovered ? `/products/${product.images[1]}` : `/products/${product.images[0]}`
   }, [isHovered, product.images])
 
   return (
