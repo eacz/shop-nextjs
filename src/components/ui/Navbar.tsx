@@ -1,11 +1,15 @@
 import NextLink from 'next/link'
-import { AppBar, Badge, Button, IconButton, Link, Toolbar, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { useRouter } from 'next/router'
+import { AppBar, Badge, Button, IconButton, Link, Toolbar, Typography, Box } from '@mui/material'
 import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
 
 const noUnderline = { textDecoration: 'none' }
 
 const Navbar = () => {
+  const { pathname } = useRouter()
+
+  const pathCategory = pathname.split('/')[2]
+
   return (
     <AppBar>
       <Toolbar>
@@ -18,20 +22,20 @@ const Navbar = () => {
 
         <Box flex={1} />
 
-        <Box sx={{display: { xs: 'none', sm:'block' } }} >
+        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
           <NextLink style={noUnderline} href='/category/men' passHref>
             <Link component='span'>
-              <Button>Men</Button>
+              <Button color={pathCategory === 'men' ? 'primary' : 'info'}>Men</Button>
             </Link>
           </NextLink>
           <NextLink style={noUnderline} href='/category/women' passHref>
             <Link component='span'>
-              <Button>Women</Button>
+              <Button color={pathCategory === 'women' ? 'primary' : 'info'}>Women</Button>
             </Link>
           </NextLink>
           <NextLink style={noUnderline} href='/category/kid' passHref>
             <Link component='span'>
-              <Button>Kid</Button>
+              <Button color={pathCategory === 'kid' ? 'primary' : 'info'}>Kid</Button>
             </Link>
           </NextLink>
         </Box>
