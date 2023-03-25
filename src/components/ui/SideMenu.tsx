@@ -7,6 +7,7 @@ import {
   InputAdornment,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   ListSubheader,
@@ -23,10 +24,26 @@ import {
   SearchOutlined,
   VpnKeyOutlined,
 } from '@mui/icons-material'
+import { UiContext } from '@/context'
+import { useContext } from 'react'
+import { useRouter } from 'next/router';
 
 const SideMenu = () => {
+  const { isMenuOpen, toggleMenu } = useContext(UiContext)
+  const {push} = useRouter()
+
+  const navigateTo = (route: string) => {
+      push(route)
+      toggleMenu()
+  }
+
   return (
-    <Drawer open={false} anchor='right' sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}>
+    <Drawer
+      open={isMenuOpen}
+      anchor='right'
+      onClose={() => toggleMenu()}
+      sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}
+    >
       <Box sx={{ width: 250, paddingTop: 5 }}>
         <List>
           <ListItem>
@@ -57,26 +74,26 @@ const SideMenu = () => {
             <ListItemText primary={'Mis Ordenes'} />
           </ListItem>
 
-          <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+          <ListItemButton onClick={() => navigateTo('/category/men')}  sx={{ display: { xs: '', sm: 'none' } }}>
             <ListItemIcon>
               <MaleOutlined />
             </ListItemIcon>
             <ListItemText primary={'Hombres'} />
-          </ListItem>
+          </ListItemButton>
 
-          <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+          <ListItemButton   onClick={() => navigateTo('/category/women')}sx={{ display: { xs: '', sm: 'none' } }}>
             <ListItemIcon>
               <FemaleOutlined />
             </ListItemIcon>
             <ListItemText primary={'Mujeres'} />
-          </ListItem>
+          </ListItemButton>
 
-          <ListItem button sx={{ display: { xs: '', sm: 'none' } }}>
+          <ListItemButton  onClick={() => navigateTo('/category/kid')} sx={{ display: { xs: '', sm: 'none' } }}>
             <ListItemIcon>
               <EscalatorWarningOutlined />
             </ListItemIcon>
             <ListItemText primary={'Niños'} />
-          </ListItem>
+          </ListItemButton>
 
           <ListItem button>
             <ListItemIcon>
