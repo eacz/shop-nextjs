@@ -19,7 +19,7 @@ const Product = ({ product }: Props) => {
   return (
     <Grid item xs={6} sm={4} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
       <Card>
-        <NextLink href='/products/slug' passHref prefetch={false}>
+        <NextLink href={`/products/${product.slug}`} passHref prefetch={false}>
           <CardActionArea>
             <CardMedia
               className='fadeIn'

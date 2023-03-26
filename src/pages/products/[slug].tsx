@@ -2,30 +2,37 @@ import { Grid, Box, Typography, Button, Chip } from '@mui/material'
 
 import { ProductSlideshow, SizeSelector } from '@/components/products'
 import { ShopLayout } from '@/components/layouts'
-import { initialData } from '@/database/products'
-import ItemCounter from '../../components/ui/ItemCounter'
+import ItemCounter from '@/components/ui/ItemCounter'
+import { initialData } from '../../database/products';
 
-const productTest = initialData.products[0]
+const product = initialData.products[0]
 
 const ProductPage = () => {
+  //const router = useRouter()
+  //const {products: product, isLoading} = useProducts(`/products/${router.query.slug}`)
+
+
+
+
+
   return (
-    <ShopLayout pageDescription={productTest.description} title={productTest.title}>
+    <ShopLayout pageDescription={product.description} title={product.title}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={7}>
-          <ProductSlideshow images={productTest.images} />
+          <ProductSlideshow images={product.images} />
         </Grid>
         <Grid item xs={12} sm={5}>
           <Box display='flex' flexDirection='column'>
             <Typography variant='h1' component='h1'>
-              {productTest.title}
+              {product.title}
             </Typography>
             <Typography variant='subtitle1' component='h2'>
-              ${productTest.price}
+              ${product.price}
             </Typography>
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Amount: </Typography>
               <ItemCounter />
-              <SizeSelector selectedSize={productTest.sizes[0]} sizes={productTest.sizes} />
+              <SizeSelector selectedSize={product.sizes[0]} sizes={product.sizes} />
             </Box>
 
             {/* Add to cart */}
@@ -36,7 +43,7 @@ const ProductPage = () => {
 
             <Box sx={{ mt: 3 }}>
               <Typography variant='subtitle2'>Description</Typography>
-              <Typography variant='body2'>{productTest.description}</Typography>
+              <Typography variant='body2'>{product.description}</Typography>
             </Box>
           </Box>
         </Grid>
