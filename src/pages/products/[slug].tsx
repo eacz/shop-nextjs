@@ -1,19 +1,19 @@
+import { GetServerSideProps, NextPage } from 'next'
 import { Grid, Box, Typography, Button, Chip } from '@mui/material'
 
 import { ProductSlideshow, SizeSelector } from '@/components/products'
 import { ShopLayout } from '@/components/layouts'
-import ItemCounter from '@/components/ui/ItemCounter'
-import { initialData } from '../../database/products';
+import { ItemCounter } from '@/components/ui'
+import { IProduct } from '@/interfaces/product'
+import { dbProducts } from '@/database'
 
-const product = initialData.products[0]
+interface Props {
+  product: IProduct
+}
 
-const ProductPage = () => {
+const ProductPage: NextPage<Props> = ({ product }) => {
   //const router = useRouter()
   //const {products: product, isLoading} = useProducts(`/products/${router.query.slug}`)
-
-
-
-
 
   return (
     <ShopLayout pageDescription={product.description} title={product.title}>
@@ -50,6 +50,27 @@ const ProductPage = () => {
       </Grid>
     </ShopLayout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const { slug } = params as { slug: string }
+
+  const product = await dbProducts.getProductBySlug(slug)
+
+  if (!product) {
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {
+      product,
+    },
+  }
 }
 
 export default ProductPage
