@@ -19,7 +19,7 @@ export default function Search({ products, query, wereProductsFounded }: Props) 
         Search Products
       </Typography>
       {wereProductsFounded ? (
-        <Typography color='secondary' variant='h2' sx={{ mb: 1 }}>
+        <Typography textTransform='capitalize' color='secondary' variant='h2' sx={{ mb: 1 }}>
           {query}
         </Typography>
       ) : (
@@ -27,7 +27,7 @@ export default function Search({ products, query, wereProductsFounded }: Props) 
           <Typography variant='h2' sx={{ mb: 1 }}>
             There is no products that match your search
           </Typography>
-          <Typography color='secondary' variant='h2' sx={{ mb: 1, ml:1 }}>
+          <Typography textTransform='capitalize' color='secondary' variant='h2' sx={{ mb: 1, ml: 1 }}>
             {query}
           </Typography>
         </Box>
@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   let products = await dbProducts.getProductsByTerm(query)
   const wereProductsFounded = products.length > 0
 
-  if(!wereProductsFounded){
+  if (!wereProductsFounded) {
     products = await dbProducts.getAllProducts()
   }
 
