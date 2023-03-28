@@ -1,4 +1,4 @@
-import { GetServerSideProps, NextPage } from 'next'
+import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { Grid, Box, Typography, Button, Chip } from '@mui/material'
 
 import { ProductSlideshow, SizeSelector } from '@/components/products'
@@ -52,7 +52,16 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   )
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+  const slugs = await dbProducts.getAllProductsSlugs()
+
+  return {
+    paths: slugs.map(({ slug }) => ({ params: { slug } })),
+    fallback: 'blocking',
+  }
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { slug } = params as { slug: string }
 
   const product = await dbProducts.getProductBySlug(slug)
@@ -67,10 +76,31 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   }
 
   return {
-    props: {
-      product,
-    },
+    props: { product },
+    revalidate: 86400,
   }
 }
+
+//  This works but is better to generate the page statically
+//export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+//  const { slug } = params as { slug: string }
+
+//  const product = await dbProducts.getProductBySlug(slug)
+
+//  if (!product) {
+//    return {
+//      redirect: {
+//        destination: '/',
+//        permanent: false,
+//      },
+//    }
+//  }
+
+//  return {
+//    props: {
+//      product,
+//    },
+//  }
+//}
 
 export default ProductPage
