@@ -25,6 +25,7 @@ export const connect = async () => {
 }
 
 export const disconnect = async () => {
+  mongoConnection.isConnected = 0;
   if (process.env.NODE_ENV === 'development') return
 
   if (mongoConnection.isConnected === 0) return
