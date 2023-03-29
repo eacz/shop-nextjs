@@ -1,19 +1,35 @@
+import { useState } from 'react'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
 import { Grid, Box, Typography, Button, Chip } from '@mui/material'
 
 import { ProductSlideshow, SizeSelector } from '@/components/products'
 import { ShopLayout } from '@/components/layouts'
 import { ItemCounter } from '@/components/ui'
-import { IProduct } from '@/interfaces/product'
 import { dbProducts } from '@/database'
+import { ICartProduct, IProduct } from '@/interfaces'
+import { ISize } from '../../interfaces/product'
 
 interface Props {
   product: IProduct
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
-  //const router = useRouter()
-  //const {products: product, isLoading} = useProducts(`/products/${router.query.slug}`)
+  const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+    _id: product._id,
+    image: product.images[0],
+    inStock: product.inStock,
+    price: product.price,
+    size: undefined,
+    slug: product.slug,
+    tags: product.tags,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1,
+  })
+
+  const handleSelectedSize = (size: ISize) => {
+    setTempCartProduct((current) => ({ ...current, size }))
+  }
 
   return (
     <ShopLayout pageDescription={product.description} title={product.title}>
@@ -32,13 +48,17 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Amount: </Typography>
               <ItemCounter />
-              <SizeSelector selectedSize={product.sizes[0]} sizes={product.sizes} />
+              <SizeSelector
+                selectedSize={tempCartProduct.size}
+                sizes={product.sizes}
+                onSelectedSize={handleSelectedSize}
+              />
             </Box>
 
             {/* Add to cart */}
             {product.inStock > 0 ? (
               <Button color='secondary' className='circular-btn'>
-                Add to cart
+                {tempCartProduct.size ? 'Add to cart' : 'Select a size'}
               </Button>
             ) : (
               <Chip label='Out of stock' color='error' variant='outlined' />
@@ -83,27 +103,5 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     revalidate: 86400,
   }
 }
-
-//  This works but is better to generate the page statically
-//export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-//  const { slug } = params as { slug: string }
-
-//  const product = await dbProducts.getProductBySlug(slug)
-
-//  if (!product) {
-//    return {
-//      redirect: {
-//        destination: '/',
-//        permanent: false,
-//      },
-//    }
-//  }
-
-//  return {
-//    props: {
-//      product,
-//    },
-//  }
-//}
 
 export default ProductPage
