@@ -1,19 +1,21 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next'
+import { useRouter } from 'next/router'
 import { Grid, Box, Typography, Button, Chip } from '@mui/material'
 
 import { ProductSlideshow, SizeSelector } from '@/components/products'
 import { ShopLayout } from '@/components/layouts'
 import { ItemCounter } from '@/components/ui'
 import { dbProducts } from '@/database'
-import { ICartProduct, IProduct } from '@/interfaces'
-import { ISize } from '../../interfaces/product'
+import { ICartProduct, IProduct, ISize } from '@/interfaces'
+import { CartContext } from '@/context/cart/CartContext'
 
 interface Props {
   product: IProduct
 }
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+  const { addProductToCart } = useContext(CartContext)
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,
     image: product.images[0],
@@ -26,6 +28,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     gender: product.gender,
     quantity: 1,
   })
+  const { push } = useRouter()
 
   const handleSelectedSize = (size: ISize) => {
     setTempCartProduct((current) => ({ ...current, size }))
@@ -33,6 +36,13 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 
   const handleQuantityChange = (quantity: number) => {
     setTempCartProduct((current) => ({ ...current, quantity }))
+  }
+
+  const handleAddToCart = () => {
+    if (!tempCartProduct.size) return
+    addProductToCart(tempCartProduct)
+
+    push('/cart')
   }
 
   return (
@@ -65,7 +75,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 
             {/* Add to cart */}
             {product.inStock > 0 ? (
-              <Button color='secondary' className='circular-btn'>
+              <Button onClick={handleAddToCart} color='secondary' className='circular-btn'>
                 {tempCartProduct.size ? 'Add to cart' : 'Select a size'}
               </Button>
             ) : (
