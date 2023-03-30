@@ -1,29 +1,26 @@
 import NextLink from 'next/link'
+import { useContext } from 'react'
 import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '@mui/material'
-import { initialData } from '../../database/products'
-import { ItemCounter } from '../ui'
 
-const productsInCart = [initialData.products[0], initialData.products[1], initialData.products[2]]
+import { CartContext } from '@/context'
+import { ItemCounter } from '@/components/ui'
 
 interface Props {
   editable?: boolean
 }
 
 const CartList = ({ editable = false }: Props) => {
+  const { cart } = useContext(CartContext)
   return (
     <>
-      {productsInCart.map((product) => (
+      {cart.map((product) => (
         <Grid container spacing={2} key={product.slug} sx={{ mb: 1 }}>
           <Grid item xs={3}>
             {/* TODO: redirect to product page */}
             <NextLink href={`/products/slug`} passHref>
               <Link component='span'>
                 <CardActionArea>
-                  <CardMedia
-                    image={`/products/${product.images[0]}`}
-                    component='img'
-                    sx={{ borderRadius: 5 }}
-                  />
+                  <CardMedia image={`/products/${product.image}`} component='img' sx={{ borderRadius: 5 }} />
                 </CardActionArea>
               </Link>
             </NextLink>
@@ -34,7 +31,17 @@ const CartList = ({ editable = false }: Props) => {
               <Typography variant='body1'>
                 Size: <strong>M</strong>
               </Typography>
-              {editable ? <ItemCounter /> : <Typography sx={{mt: 1}} variant='h5'>3 Items</Typography>}
+              {editable ? (
+                <ItemCounter
+                  currentValue={product.quantity}
+                  maxValue={product.inStock}
+                  onQuantityChange={() => {}}
+                />
+              ) : (
+                <Typography sx={{ mt: 1 }} variant='h5'>
+                  {product.quantity} {product.quantity > 1 ? 'products' : 'product'}
+                </Typography>
+              )}
             </Box>
           </Grid>
           <Grid item xs={2} display='flex' alignItems='center' flexDirection='column'>
