@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useReducer } from 'react'
 import Cookie from 'js-cookie'
 
 import { CartContext, CartReducer } from '.'
-import { ICartProduct } from '@/interfaces'
+import { ICartProduct, OrderSummary } from '@/interfaces'
 
 export interface CartState {
   cart: ICartProduct[]
@@ -25,9 +25,20 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   useEffect(() => {
-    if (state.cart.length > 0) {
-      Cookie.set('cart', JSON.stringify(state.cart))
+    Cookie.set('cart', JSON.stringify(state.cart))
+  }, [state.cart])
+
+  useEffect(() => {
+    const numberOfItems = state.cart.reduce((prev, product) => prev + product.quantity, 0)
+    const subtotal = state.cart.reduce((prev, product) => prev + product.price * product.quantity, 0)
+    const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE || 0)
+    const orderSummary: OrderSummary = {
+      numberOfItems,
+      subtotal,
+      tax: subtotal * taxRate,
+      total: subtotal * (taxRate + 1),
     }
+    console.log({ orderSummary })
   }, [state.cart])
 
   const addProductToCart = (product: ICartProduct) => {
@@ -59,7 +70,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const removeProductFromCart = (product: ICartProduct) => {
-    dispatch({type: '[Cart] - Remove Product From Cart', payload: product})
+    dispatch({ type: '[Cart] - Remove Product From Cart', payload: product })
   }
 
   return (
