@@ -15,13 +15,18 @@ import {
 } from '@mui/material'
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
 
-import { UiContext } from '@/context'
+import { CartContext, UiContext } from '@/context'
 
 const noUnderline = { textDecoration: 'none' }
 
 const Navbar = () => {
   const { pathname, push } = useRouter()
+
   const { toggleMenu } = useContext(UiContext)
+  const {
+    cartSummary: { numberOfItems },
+  } = useContext(CartContext)
+
   const [searchTerm, setSearchTerm] = useState('')
   const [isSearchVisible, setIsSearchVisible] = useState(false)
 
@@ -83,7 +88,11 @@ const Navbar = () => {
             }
           />
         ) : (
-          <IconButton sx={{ display: { xs: 'none', sm: 'flex' } }} className='fadeIn' onClick={() => setIsSearchVisible(true)}>
+          <IconButton
+            sx={{ display: { xs: 'none', sm: 'flex' } }}
+            className='fadeIn'
+            onClick={() => setIsSearchVisible(true)}
+          >
             <SearchOutlined />
           </IconButton>
         )}
@@ -96,7 +105,7 @@ const Navbar = () => {
         <NextLink href='/cart' passHref>
           <Link component='span'>
             <IconButton>
-              <Badge badgeContent={2} color='secondary'>
+              <Badge badgeContent={numberOfItems > 9 ? '+9' : numberOfItems} color='secondary'>
                 <ShoppingCartOutlined></ShoppingCartOutlined>
               </Badge>
             </IconButton>
