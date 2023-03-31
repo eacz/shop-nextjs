@@ -4,20 +4,26 @@ import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '
 
 import { CartContext } from '@/context'
 import { ItemCounter } from '@/components/ui'
+import { ICartProduct } from '@/interfaces'
 
 interface Props {
   editable?: boolean
 }
 
 const CartList = ({ editable = false }: Props) => {
-  const { cart } = useContext(CartContext)
+  const { cart, updateCartQuantity } = useContext(CartContext)
+
+  const handleProductQuantityChange = (product: ICartProduct, newQuantity: number) => {
+    updateCartQuantity({ ...product, quantity: newQuantity })
+  }
+
   return (
     <>
       {cart.map((product) => (
-        <Grid container spacing={2} key={product.slug} sx={{ mb: 1 }}>
+        <Grid container spacing={2} key={product.slug + product.size} sx={{ mb: 1 }}>
           <Grid item xs={3}>
             {/* TODO: redirect to product page */}
-            <NextLink href={`/products/slug`} passHref>
+            <NextLink href={`/products/${product.slug}`} passHref>
               <Link component='span'>
                 <CardActionArea>
                   <CardMedia image={`/products/${product.image}`} component='img' sx={{ borderRadius: 5 }} />
@@ -29,13 +35,13 @@ const CartList = ({ editable = false }: Props) => {
             <Box display='flex' flexDirection='column'>
               <Typography variant='body1'>{product.title}</Typography>
               <Typography variant='body1'>
-                Size: <strong>M</strong>
+                Size: <strong>{product.size}</strong>
               </Typography>
               {editable ? (
                 <ItemCounter
                   currentValue={product.quantity}
                   maxValue={product.inStock}
-                  onQuantityChange={() => {}}
+                  onQuantityChange={(quantity) => handleProductQuantityChange(product, quantity)}
                 />
               ) : (
                 <Typography sx={{ mt: 1 }} variant='h5'>

@@ -54,11 +54,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: '[Cart] - Update Cart Products', payload: updatedProducts })
   }
 
+  const updateCartQuantity = (product: ICartProduct) => {
+    dispatch({ type: '[Cart] - Update Product Quantity', payload: product })
+  }
+
   return (
     <CartContext.Provider
       value={{
         ...state,
+
+        
         addProductToCart,
+        updateCartQuantity,
       }}
     >
       {children}
