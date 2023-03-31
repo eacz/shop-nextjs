@@ -11,7 +11,7 @@ interface Props {
 }
 
 const CartList = ({ editable = false }: Props) => {
-  const { cart, updateCartQuantity } = useContext(CartContext)
+  const { cart, updateCartQuantity, removeProductFromCart } = useContext(CartContext)
 
   const handleProductQuantityChange = (product: ICartProduct, newQuantity: number) => {
     updateCartQuantity({ ...product, quantity: newQuantity })
@@ -53,7 +53,7 @@ const CartList = ({ editable = false }: Props) => {
           <Grid item xs={2} display='flex' alignItems='center' flexDirection='column'>
             <Typography variant='subtitle1'>${product.price}</Typography>
             {editable && (
-              <Button variant='text' color='secondary'>
+              <Button variant='text' color='secondary' onClick={() => removeProductFromCart(product)}>
                 Remove
               </Button>
             )}
