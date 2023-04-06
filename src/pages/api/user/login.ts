@@ -29,7 +29,7 @@ const login = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return res.status(400).json({ message: 'Invalid email or password' })
   }
 
-  if (!bcrypt.compareSync(password, user.password)) {
+  if (!bcrypt.compareSync(password, user.password!)) {
     return res.status(400).json({ message: 'Invalid email or password' })
   }
 
