@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { db, seedData } from '../../database'
-import { Product } from '../../models'
+
+import { db, seedData } from '@/database'
+import { User, Product } from '@/models'
 
 type Data = {
   ok: boolean
@@ -14,9 +15,13 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
       res.status(401).json({ ok: false, message: 'Not allowed to do this.' })
     }
     await db.connect()
+    
+    await User.deleteMany({})
+    await User.insertMany(seedData.initialData.users)
 
     await Product.deleteMany({})
     await Product.insertMany(seedData.initialData.products)
+
 
     await db.disconnect()
 
@@ -25,6 +30,5 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
     console.log({ error })
     //TODO: handle db errors
     res.status(500).json({ ok: false, message: 'Something went wrong' })
-
   }
 }
