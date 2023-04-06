@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import { db } from '@/database'
 import { User } from '@/models'
 import { IUser } from '@/interfaces'
-import { jwt } from '@/utils'
+import { jwt, validations } from '@/utils'
 
 type Data = { message: string } | { user: IUser; token: string }
 
@@ -23,7 +23,7 @@ const signup = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   return res.status(400).json({ message: 'Invalid password. Must be at least 6 characters.' })
   if (!name || name.length < 2)
   return res.status(400).json({ message: 'Invalid name. Must be at least 2 characters' })
-  if (!email) return res.status(400).json({ message: 'Invalid email' })
+  if (!email || !validations.isValidEmail(email)) return res.status(400).json({ message: 'Invalid email' })
 
   try {
     await db.connect()
