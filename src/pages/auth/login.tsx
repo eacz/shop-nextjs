@@ -1,7 +1,8 @@
+import { useState } from 'react'
 import NextLink from 'next/link'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
-import { Box, Button, Grid, Link, Snackbar, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Grid, Link, Snackbar, TextField, Typography } from '@mui/material'
 
 import { AuthLayout } from '@/components/layouts'
 import { validations } from '@/utils'
@@ -19,15 +20,21 @@ const LoginPage = () => {
     watch,
     formState: { errors },
   } = useForm<formData>()
+  const [isLoginError, setIsLoginError] = useState<{ status: boolean; message: string }>({
+    status: false,
+    message: '',
+  })
 
   const onLogin = async ({ email, password }: formData) => {
+    setIsLoginError({ status: false, message: '' })
     try {
       const { data } = await tesloApi.post<loginResponse>('/user/login', { password, email })
       const { token, user } = data
-      console.log({ token, user })
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.message || 'Server error. Please contact support.'
+        setIsLoginError({ status: true, message: errorMessage })
+
         console.log(errorMessage)
       }
     }
@@ -83,6 +90,13 @@ const LoginPage = () => {
           </Grid>
         </Box>
       </form>
+      <Snackbar
+        open={isLoginError.status}
+        onClose={() => setIsLoginError({ status: false, message: '' })}
+        autoHideDuration={3000}
+      >
+        <Alert severity='error'>{isLoginError.message}</Alert>
+      </Snackbar>
     </AuthLayout>
   )
 }
