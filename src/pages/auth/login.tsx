@@ -4,6 +4,7 @@ import NextLink from 'next/link'
 import { AuthLayout } from '@/components/layouts'
 import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { validations } from '@/utils'
 
 interface formData {
   email: string
@@ -24,7 +25,7 @@ const LoginPage = () => {
 
   return (
     <AuthLayout title='Login'>
-      <form onSubmit={handleSubmit(onLogin)}>
+      <form onSubmit={handleSubmit(onLogin)} noValidate>
         <Box sx={{ width: 350, padding: '10px 20px' }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -33,7 +34,15 @@ const LoginPage = () => {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <TextField type='email' label='Email' variant='filled' fullWidth {...register('email')} />
+              <TextField
+                type='email'
+                label='Email'
+                variant='filled'
+                fullWidth
+                {...register('email', { required: 'This field is required.', validate: validations.isEmail })}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -41,7 +50,12 @@ const LoginPage = () => {
                 type='password'
                 variant='filled'
                 fullWidth
-                {...register('password')}
+                {...register('password', {
+                  required: 'This field is required.',
+                  minLength: { value: 6, message: 'Password should be at least 6 chracters' },
+                })}
+                error={!!errors.password}
+                helperText={errors.password?.message}
               />
             </Grid>
             <Grid item xs={12}>
