@@ -8,7 +8,7 @@ type authActionType =
 export const AuthReducer = (state: AuthState, action: authActionType): AuthState => {
   switch (action.type) {
     case '[Auth] - Login':
-      return { ...state, user: action.payload }
+      return { ...state, user: action.payload, isLoggedIn: true }
     case '[Auth] - Logout':
       return { ...state, isLoggedIn: false, user: undefined }
     default:

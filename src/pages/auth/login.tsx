@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { useRouter } from 'next/router'
 import NextLink from 'next/link'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
@@ -6,7 +7,7 @@ import { Alert, Box, Button, Grid, Link, Snackbar, TextField, Typography } from 
 
 import { AuthLayout } from '@/components/layouts'
 import { validations } from '@/utils'
-import { loginResponse, tesloApi } from '@/api'
+import { AuthContext } from '@/context'
 
 interface formData {
   email: string
@@ -20,24 +21,22 @@ const LoginPage = () => {
     watch,
     formState: { errors },
   } = useForm<formData>()
+  const router = useRouter()
   const [isLoginError, setIsLoginError] = useState<{ status: boolean; message: string }>({
     status: false,
     message: '',
   })
+  const { login } = useContext(AuthContext)
 
   const onLogin = async ({ email, password }: formData) => {
     setIsLoginError({ status: false, message: '' })
-    try {
-      const { data } = await tesloApi.post<loginResponse>('/user/login', { password, email })
-      const { token, user } = data
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.message || 'Server error. Please contact support.'
-        setIsLoginError({ status: true, message: errorMessage })
-
-        console.log(errorMessage)
-      }
+    const res = await login(email, password)
+    if (axios.isAxiosError(res)) {
+      const errorMessage = res.response?.data?.message || 'Server error. Please contact support.'
+      setIsLoginError({ status: true, message: errorMessage })
+      return
     }
+    router.replace('/')
   }
 
   return (
