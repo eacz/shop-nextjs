@@ -20,15 +20,20 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 const signup = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
   const { name, email, password } = req.body as { email: string; password: string; name: string }
   if (!password || password.length < 6)
-  return res.status(400).json({ message: 'Invalid password. Must be at least 6 characters.' })
+    return res.status(400).json({ message: 'Invalid password. Must be at least 6 characters.' })
   if (!name || name.length < 2)
-  return res.status(400).json({ message: 'Invalid name. Must be at least 2 characters' })
+    return res.status(400).json({ message: 'Invalid name. Must be at least 2 characters' })
   if (!email || !validations.isValidEmail(email)) return res.status(400).json({ message: 'Invalid email' })
 
   try {
     await db.connect()
 
-    const user = await User.create({ name, email: email.toLowerCase(), password: bcrypt.hashSync(password, 10), role: 'client' })
+    const user = await User.create({
+      name,
+      email: email.toLowerCase(),
+      password: bcrypt.hashSync(password, 10),
+      role: 'client',
+    })
 
     await db.disconnect()
 
@@ -38,9 +43,15 @@ const signup = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return res.status(201).json({ user, token })
   } catch (error: any) {
     if (error?.code === 11000) {
-      res.status(500).json({ message: `Duplicated key ${JSON.stringify(error.keyValue)}` })
+      console.log(error.keyValue)
+      const duplicatedErrorMessage = `The ${Object.keys(error.keyValue)[0]} '${
+        error.keyValue[Object.keys(error.keyValue)[0]]
+      }' is already used.`
+      console.log(duplicatedErrorMessage)
+
+      return res.status(400).json({ message: duplicatedErrorMessage })
     }
 
-    res.status(500).json({ message: 'Internal Server Error' })
+    return res.status(500).json({ message: 'Internal Server Error' })
   }
 }

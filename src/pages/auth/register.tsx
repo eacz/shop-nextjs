@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import NextLink from 'next/link'
+import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { Alert, Box, Button, Grid, Link, Snackbar, TextField, Typography } from '@mui/material'
 
 import { AuthLayout } from '@/components/layouts'
 import { validations } from '@/utils'
 import { tesloApi } from '@/api'
-import axios from 'axios'
 
 type formData = {
   password: string
