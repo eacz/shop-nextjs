@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import NextLink from 'next/link'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
@@ -7,6 +7,8 @@ import { Alert, Box, Button, Grid, Link, Snackbar, TextField, Typography } from 
 import { AuthLayout } from '@/components/layouts'
 import { validations } from '@/utils'
 import { tesloApi } from '@/api'
+import { AuthContext } from '@/context'
+import { useRouter } from 'next/router'
 
 type formData = {
   password: string
@@ -25,20 +27,19 @@ const RegisterPage = () => {
     status: false,
     message: '',
   })
+  const router = useRouter()
+  const { signup } = useContext(AuthContext)
 
   const onRegister = async ({ email, name, password }: formData) => {
-    try {
-      const { data } = await tesloApi.post('/user/signup', { email, name, password })
-      console.log({ data })
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.message || 'Server error. Please contact support.'
-        setIsRegisterError({ status: true, message: errorMessage })
-
-        console.log(errorMessage)
-      }
+    const res = await signup(name, email, password)
+    if (axios.isAxiosError(res)) {
+      const errorMessage = res.response?.data?.message || 'Server error. Please contact support.'
+      setIsRegisterError({ status: true, message: errorMessage })
+      return
     }
+    router.replace('/')
   }
+
   return (
     <AuthLayout title='Login'>
       <form onSubmit={handleSubmit(onRegister)} noValidate>

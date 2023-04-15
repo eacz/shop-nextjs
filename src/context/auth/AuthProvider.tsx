@@ -3,7 +3,7 @@ import Cookies from 'js-cookie'
 
 import { AuthContext, AuthReducer } from '.'
 import { IUser } from '@/interfaces'
-import { loginResponse, tesloApi } from '@/api'
+import { loginResponse, signupResponse, tesloApi } from '@/api'
 
 export interface AuthState {
   isLoggedIn: boolean
@@ -28,12 +28,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const signup = async (name: string, email: string, password: string): Promise<unknown | undefined> => {
+    try {
+      const { data } = await tesloApi.post<signupResponse>('/user/signup', { name, email, password })
+      Cookies.set('token', data.token)
+      dispatch({ type: '[Auth] - Login', payload: data.user })
+    } catch (error) {
+      return error
+    }
+  }
+
   return (
     <AuthContext.Provider
       value={{
         ...state,
 
         login,
+        signup
       }}
     >
       {children}
