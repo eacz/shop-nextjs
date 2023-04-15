@@ -43,12 +43,9 @@ const signup = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     return res.status(201).json({ user, token })
   } catch (error: any) {
     if (error?.code === 11000) {
-      console.log(error.keyValue)
       const duplicatedErrorMessage = `The ${Object.keys(error.keyValue)[0]} '${
         error.keyValue[Object.keys(error.keyValue)[0]]
       }' is already used.`
-      console.log(duplicatedErrorMessage)
-
       return res.status(400).json({ message: duplicatedErrorMessage })
     }
 
