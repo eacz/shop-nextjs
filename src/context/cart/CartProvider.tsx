@@ -5,11 +5,13 @@ import { CartContext, CartReducer } from '.'
 import { ICartProduct, OrderSummary } from '@/interfaces'
 
 export interface CartState {
+  isLoaded: boolean
   cart: ICartProduct[]
   cartSummary: OrderSummary
 }
 
 const CART_INITIAL_STATE: CartState = {
+  isLoaded: false,
   cart: [],
   cartSummary: {
     numberOfItems: 0,
@@ -32,7 +34,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   useEffect(() => {
-    Cookie.set('cart', JSON.stringify(state.cart))
+    if(state.cart.length > 0){
+      Cookie.set('cart', JSON.stringify(state.cart))
+    }
   }, [state.cart])
 
   useEffect(() => {

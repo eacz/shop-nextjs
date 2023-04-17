@@ -3,6 +3,7 @@ import { createContext } from 'react'
 import { ICartProduct, OrderSummary } from '@/interfaces'
 
 interface ContextProps {
+  isLoaded: boolean;
   cart: ICartProduct[]
   cartSummary: OrderSummary
 
