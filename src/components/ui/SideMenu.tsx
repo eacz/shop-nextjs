@@ -61,7 +61,7 @@ const SideMenu = () => {
             <Input
               autoFocus
               type='text'
-              placeholder='Buscar...'
+              placeholder='Search...'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && onSearchTerm()}
@@ -81,21 +81,21 @@ const SideMenu = () => {
                 <ListItemIcon>
                   <AccountCircleOutlined />
                 </ListItemIcon>
-                <ListItemText primary={'Perfil'} />
+                <ListItemText primary={'Profile'} />
               </ListItemButton>
 
               <ListItemButton>
                 <ListItemIcon>
                   <ConfirmationNumberOutlined />
                 </ListItemIcon>
-                <ListItemText primary={'Mis Ordenes'} />
+                <ListItemText primary={'My Orders'} />
               </ListItemButton>
 
               <ListItemButton onClick={() => logout()}>
                 <ListItemIcon>
                   <LoginOutlined />
                 </ListItemIcon>
-                <ListItemText primary={'Salir'} />
+                <ListItemText primary={'Logout'} />
               </ListItemButton>
             </>
           ) : (
@@ -103,7 +103,7 @@ const SideMenu = () => {
               <ListItemIcon>
                 <VpnKeyOutlined />
               </ListItemIcon>
-              <ListItemText primary={'Ingresar'} />
+              <ListItemText primary={'Login'} />
             </ListItemButton>
           )}
 
@@ -114,7 +114,7 @@ const SideMenu = () => {
             <ListItemIcon>
               <MaleOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Hombres'} />
+            <ListItemText primary={'Men'} />
           </ListItemButton>
 
           <ListItemButton
@@ -124,7 +124,7 @@ const SideMenu = () => {
             <ListItemIcon>
               <FemaleOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Mujeres'} />
+            <ListItemText primary={'Women'} />
           </ListItemButton>
 
           <ListItemButton
@@ -134,7 +134,7 @@ const SideMenu = () => {
             <ListItemIcon>
               <EscalatorWarningOutlined />
             </ListItemIcon>
-            <ListItemText primary={'Niños'} />
+            <ListItemText primary={'Kid'} />
           </ListItemButton>
 
           {/* Admin */}
@@ -143,25 +143,25 @@ const SideMenu = () => {
               <Divider />
               <ListSubheader>Admin Panel</ListSubheader>
 
-              <ListItem button>
+              <ListItemButton>
                 <ListItemIcon>
                   <CategoryOutlined />
                 </ListItemIcon>
-                <ListItemText primary={'Productos'} />
-              </ListItem>
-              <ListItem button>
+                <ListItemText primary={'Products'} />
+              </ListItemButton>
+              <ListItemButton>
                 <ListItemIcon>
                   <ConfirmationNumberOutlined />
                 </ListItemIcon>
-                <ListItemText primary={'Ordenes'} />
-              </ListItem>
+                <ListItemText primary={'Orders'} />
+              </ListItemButton>
 
-              <ListItem button>
+              <ListItemButton>
                 <ListItemIcon>
                   <AdminPanelSettings />
                 </ListItemIcon>
-                <ListItemText primary={'Usuarios'} />
-              </ListItem>
+                <ListItemText primary={'Users'} />
+              </ListItemButton>
             </>
           )}
         </List>
