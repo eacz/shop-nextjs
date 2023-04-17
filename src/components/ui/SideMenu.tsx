@@ -26,14 +26,15 @@ import {
   SearchOutlined,
   VpnKeyOutlined,
 } from '@mui/icons-material'
+
 import { AuthContext, UiContext } from '@/context'
 
 const SideMenu = () => {
   const [searchTerm, setSearchTerm] = useState('')
-  const { push } = useRouter()
+  const { push, asPath } = useRouter()
   const { isMenuOpen, toggleMenu } = useContext(UiContext)
 
-  const { user, isLoggedIn } = useContext(AuthContext)
+  const { user, isLoggedIn, logout } = useContext(AuthContext)
   const isAdmin = !!(user && user.role === 'admin')
 
   const navigateTo = (route: string) => {
@@ -90,7 +91,7 @@ const SideMenu = () => {
                 <ListItemText primary={'Mis Ordenes'} />
               </ListItemButton>
 
-              <ListItemButton>
+              <ListItemButton onClick={() => logout()}>
                 <ListItemIcon>
                   <LoginOutlined />
                 </ListItemIcon>
@@ -98,7 +99,7 @@ const SideMenu = () => {
               </ListItemButton>
             </>
           ) : (
-            <ListItemButton>
+            <ListItemButton onClick={() => navigateTo(`/auth/login?page=${asPath}`)}>
               <ListItemIcon>
                 <VpnKeyOutlined />
               </ListItemIcon>

@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import { AuthContext, AuthReducer } from '.'
 import { IUser } from '@/interfaces'
 import { loginResponse, signupResponse, tesloApi, validateTokenResponse } from '@/api'
+import { useRouter } from 'next/router'
 
 export interface AuthState {
   isLoggedIn: boolean
@@ -17,6 +18,7 @@ const CART_INITIAL_STATE: AuthState = {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(AuthReducer, CART_INITIAL_STATE)
+  const router = useRouter()
 
   const login = async (email: string, password: string): Promise<unknown | undefined> => {
     try {
@@ -36,6 +38,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
       return error
     }
+  }
+
+  const logout = () => {
+    Cookies.remove('token')
+    Cookies.remove('cart')
+    router.reload()
   }
 
   const checkToken = async () => {
@@ -61,6 +69,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         login,
         signup,
+        logout,
       }}
     >
       {children}

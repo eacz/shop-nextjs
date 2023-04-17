@@ -7,6 +7,7 @@ interface ContextProps {
 
   login: (email: string, password: string) => Promise<unknown | undefined>
   signup: (name: string, email: string, password: string) => Promise<unknown | undefined>
+  logout: () => void
 }
 
 export const AuthContext = createContext({} as ContextProps)

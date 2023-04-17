@@ -36,7 +36,8 @@ const LoginPage = () => {
       setIsLoginError({ status: true, message: errorMessage })
       return
     }
-    router.replace('/')
+    const destination = router.query.page?.toString() || '/'
+    router.replace(destination)
   }
 
   return (
