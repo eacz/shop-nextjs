@@ -1,9 +1,9 @@
-import { ReactNode, useReducer } from 'react'
+import { ReactNode, useEffect, useReducer } from 'react'
 import Cookies from 'js-cookie'
 
 import { AuthContext, AuthReducer } from '.'
 import { IUser } from '@/interfaces'
-import { loginResponse, signupResponse, tesloApi } from '@/api'
+import { loginResponse, signupResponse, tesloApi, validateTokenResponse } from '@/api'
 
 export interface AuthState {
   isLoggedIn: boolean
@@ -38,13 +38,29 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const checkToken = async () => {
+    if (Cookies.get('token')) {
+      try {
+        const { data } = await tesloApi.get<validateTokenResponse>('/user/validate-token')
+        Cookies.set('token', data.token)
+        dispatch({ type: '[Auth] - Login', payload: data.user })
+      } catch (error) {
+        Cookies.remove('token')
+      }
+    }
+  }
+
+  useEffect(() => {
+    checkToken()
+  }, [])
+
   return (
     <AuthContext.Provider
       value={{
         ...state,
 
         login,
-        signup
+        signup,
       }}
     >
       {children}

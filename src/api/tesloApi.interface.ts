@@ -9,3 +9,8 @@ export interface signupResponse {
   user: IUser
   token: string
 }
+
+export interface validateTokenResponse {
+  user: IUser
+  token: string
+}
