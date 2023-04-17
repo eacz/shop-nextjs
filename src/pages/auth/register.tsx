@@ -37,8 +37,11 @@ const RegisterPage = () => {
       setIsRegisterError({ status: true, message: errorMessage })
       return
     }
-    router.replace('/')
+    const destination = router.query.page?.toString() || '/'
+    router.replace(destination)
   }
+
+  const previousPage = router.query.page?.toString() ? `?page=${router.query.page?.toString()}` : ''
 
   return (
     <AuthLayout title='Login'>
@@ -93,7 +96,7 @@ const RegisterPage = () => {
               </Button>
             </Grid>
             <Grid item xs={12} display='flex' justifyContent='end'>
-              <NextLink href='/auth/login' passHref>
+              <NextLink href={`/auth/login${previousPage}`} passHref>
                 <Link component='span' underline='always'>
                   You already have an account?
                 </Link>

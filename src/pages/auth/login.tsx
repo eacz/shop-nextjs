@@ -40,6 +40,8 @@ const LoginPage = () => {
     router.replace(destination)
   }
 
+  const previousPage = router.query.page?.toString() ? `?page=${router.query.page?.toString()}` : ''
+
   return (
     <AuthLayout title='Login'>
       <form onSubmit={handleSubmit(onLogin)} noValidate>
@@ -81,7 +83,7 @@ const LoginPage = () => {
               </Button>
             </Grid>
             <Grid item xs={12} display='flex' justifyContent='end'>
-              <NextLink href='/auth/register' passHref>
+              <NextLink href={`/auth/register${previousPage}`} passHref>
                 <Link component='span' underline='always'>
                   You don&apos;t have an account?
                 </Link>
