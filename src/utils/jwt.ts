@@ -11,6 +11,9 @@ export const isValidToken = (token: string): Promise<string> => {
   if (!process.env.SECRET_KEY) {
     throw new Error('missing SECRET_KEY. check env vars')
   }
+  if(token.length <= 10){
+    return Promise.reject('Invalid Jwt')
+  }
   return new Promise((resolve, reject) => {
     try {
       jwt.verify(token, process.env.SECRET_KEY || '', (err, payload) => {
