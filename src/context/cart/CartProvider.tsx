@@ -8,7 +8,7 @@ export interface CartState {
   isLoaded: boolean
   cart: ICartProduct[]
   cartSummary: OrderSummary
-  address: Address
+  address?: Address
 }
 
 const CART_INITIAL_STATE: CartState = {
@@ -19,16 +19,6 @@ const CART_INITIAL_STATE: CartState = {
     subtotal: 0,
     tax: 0,
     total: 0,
-  },
-  address: {
-    firstname: '',
-    lastname: '',
-    address: '',
-    address2: '',
-    zipcode: '',
-    city: '',
-    country: '',
-    phone: '',
   },
 }
 

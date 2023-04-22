@@ -6,7 +6,7 @@ interface ContextProps {
   isLoaded: boolean
   cart: ICartProduct[]
   cartSummary: OrderSummary
-  address: Address
+  address?: Address
 
   addProductToCart: (product: ICartProduct) => void
   updateCartQuantity: (product: ICartProduct) => void
