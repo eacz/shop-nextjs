@@ -1,4 +1,14 @@
-import { Typography, Grid, TextField, FormControl, Select, MenuItem, Box, Button } from '@mui/material'
+import {
+  Typography,
+  Grid,
+  TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  Box,
+  Button,
+  getAccordionActionsUtilityClass,
+} from '@mui/material'
 import { useForm } from 'react-hook-form'
 
 import { ShopLayout } from '@/components/layouts'
@@ -17,6 +27,19 @@ interface FormData {
   phone: string
 }
 
+const getAddressFromCookies = (): FormData => {
+  return {
+    firstname: Cookies.get('firstname') || '',
+    lastname: Cookies.get('lastname') || '',
+    address: Cookies.get('address') || '',
+    address2: Cookies.get('address2') || '',
+    zipcode: Cookies.get('zipcode') || '',
+    city: Cookies.get('city') || '',
+    country: Cookies.get('country') || '',
+    phone: Cookies.get('phone') || '',
+  }
+}
+
 const AddressPage = () => {
   const router = useRouter()
   const {
@@ -25,16 +48,7 @@ const AddressPage = () => {
     watch,
     formState: { errors },
   } = useForm<FormData>({
-    defaultValues: {
-      firstname: '',
-      lastname: '',
-      address: '',
-      address2: '',
-      zipcode: '',
-      city: '',
-      country: countries[0].code,
-      phone: '',
-    },
+    defaultValues: getAddressFromCookies(),
   })
 
   const onSubmit = (data: FormData) => {
