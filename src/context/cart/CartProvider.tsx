@@ -1,10 +1,8 @@
 import { ReactNode, useEffect, useReducer } from 'react'
-import Cookie from 'js-cookie'
+import Cookies from 'js-cookie'
 
 import { CartContext, CartReducer } from '.'
-import { ICartProduct, OrderSummary } from '@/interfaces'
-import { Address } from '@/interfaces/address'
-import Cookies from 'js-cookie'
+import { ICartProduct, OrderSummary, Address } from '@/interfaces'
 
 export interface CartState {
   isLoaded: boolean
@@ -70,13 +68,21 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const setAddress = (address: Address) => {
+    Cookies.set('firstname', address.firstname)
+    Cookies.set('lastname', address.lastname)
+    Cookies.set('address', address.address)
+    Cookies.set('address2', address.address2 || '')
+    Cookies.set('zipcode', address.zipcode)
+    Cookies.set('city', address.city)
+    Cookies.set('country', address.country)
+    Cookies.set('phone', address.phone)
     dispatch({ type: '[Cart] - Update Address', payload: address })
   }
 
   //Load initial state for cart from cookies
   useEffect(() => {
     try {
-      const cartItems = JSON.parse(Cookie.get('cart') || '[]')
+      const cartItems = JSON.parse(Cookies.get('cart') || '[]')
       dispatch({ type: '[Cart] - LoadCart from cookies', payload: cartItems })
     } catch (error) {
       dispatch({ type: '[Cart] - LoadCart from cookies', payload: [] })
@@ -85,7 +91,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (state.cart.length > 0) {
-      Cookie.set('cart', JSON.stringify(state.cart))
+      Cookies.set('cart', JSON.stringify(state.cart))
     }
   }, [state.cart])
 
@@ -116,7 +122,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         country: Cookies.get('country') || '',
         phone: Cookies.get('phone') || '',
       }
-      dispatch({ type: '[Cart] - Update Address', payload: address })
+      dispatch({ type: '[Cart] - Load Address from Cookies', payload: address })
     }
   }, [])
 

@@ -34,16 +34,8 @@ const AddressPage = () => {
   const { setAddress } = useContext(CartContext)
 
   const onSubmit = (address: Address) => {
-    Cookies.set('firstname', address.firstname)
-    Cookies.set('lastname', address.lastname)
-    Cookies.set('address', address.address)
-    Cookies.set('address2', address.address2 || '')
-    Cookies.set('zipcode', address.zipcode)
-    Cookies.set('city', address.city)
-    Cookies.set('country', address.country)
-    Cookies.set('phone', address.phone)
-    router.push('/checkout/summary')
     setAddress(address)
+    router.push('/checkout/summary')
   }
 
   return (
