@@ -1,33 +1,15 @@
-import {
-  Typography,
-  Grid,
-  TextField,
-  FormControl,
-  Select,
-  MenuItem,
-  Box,
-  Button,
-  getAccordionActionsUtilityClass,
-} from '@mui/material'
+import { useContext } from 'react'
+import { Typography, Grid, TextField, FormControl, MenuItem, Box, Button } from '@mui/material'
+import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import Cookies from 'js-cookie'
 
 import { ShopLayout } from '@/components/layouts'
 import { countries } from '@/utils'
-import Cookies from 'js-cookie'
-import { useRouter } from 'next/router'
+import { Address } from '@/interfaces'
+import { CartContext } from '@/context'
 
-interface FormData {
-  firstname: string
-  lastname: string
-  address: string
-  address2?: string
-  zipcode: string
-  city: string
-  country: string
-  phone: string
-}
-
-const getAddressFromCookies = (): FormData => {
+const getAddressFromCookies = (): Address => {
   return {
     firstname: Cookies.get('firstname') || '',
     lastname: Cookies.get('lastname') || '',
@@ -45,22 +27,23 @@ const AddressPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<Address>({
     defaultValues: getAddressFromCookies(),
   })
+  const { setAddress } = useContext(CartContext)
 
-  const onSubmit = (data: FormData) => {
-    Cookies.set('firstname', data.firstname)
-    Cookies.set('lastname', data.lastname)
-    Cookies.set('address', data.address)
-    Cookies.set('address2', data.address2 || '')
-    Cookies.set('zipcode', data.zipcode)
-    Cookies.set('city', data.city)
-    Cookies.set('country', data.country)
-    Cookies.set('phone', data.phone)
+  const onSubmit = (address: Address) => {
+    Cookies.set('firstname', address.firstname)
+    Cookies.set('lastname', address.lastname)
+    Cookies.set('address', address.address)
+    Cookies.set('address2', address.address2 || '')
+    Cookies.set('zipcode', address.zipcode)
+    Cookies.set('city', address.city)
+    Cookies.set('country', address.country)
+    Cookies.set('phone', address.phone)
     router.push('/checkout/summary')
+    setAddress(address)
   }
 
   return (
