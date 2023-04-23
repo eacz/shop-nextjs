@@ -1,10 +1,10 @@
 import { ReactNode, useEffect, useReducer } from 'react'
+import { useRouter } from 'next/router'
 import Cookies from 'js-cookie'
 
 import { AuthContext, AuthReducer } from '.'
 import { IUser } from '@/interfaces'
 import { loginResponse, signupResponse, tesloApi, validateTokenResponse } from '@/api'
-import { useRouter } from 'next/router'
 
 export interface AuthState {
   isLoggedIn: boolean
@@ -43,6 +43,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     Cookies.remove('token')
     Cookies.remove('cart')
+    Cookies.remove('firstname')
+    Cookies.remove('lastname')
+    Cookies.remove('address')
+    Cookies.remove('address2')
+    Cookies.remove('zipcode')
+    Cookies.remove('city')
+    Cookies.remove('country')
+    Cookies.remove('phone')
     router.reload()
   }
 
