@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useReducer } from 'react'
 import { useRouter } from 'next/router'
+import { useSession } from 'next-auth/react'
 import Cookies from 'js-cookie'
 
 import { AuthContext, AuthReducer } from '.'
@@ -19,6 +20,7 @@ const CART_INITIAL_STATE: AuthState = {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(AuthReducer, CART_INITIAL_STATE)
   const router = useRouter()
+  const { data, status } = useSession()
 
   const login = async (email: string, password: string): Promise<unknown | undefined> => {
     try {
@@ -66,9 +68,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  //useEffect(() => {
+  //  checkToken()
+  //}, [])
+
   useEffect(() => {
-    checkToken()
-  }, [])
+    if (status === 'authenticated') {
+      console.log(data.user);
+      
+      //dispatch({ type: '[Auth] - Login', payload: data.user as IUser })
+    }
+  }, [status, data])
 
   return (
     <AuthContext.Provider
