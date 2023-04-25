@@ -74,7 +74,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      console.log(data.user);
       
       //dispatch({ type: '[Auth] - Login', payload: data.user as IUser })
     }
