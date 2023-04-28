@@ -1,14 +1,17 @@
 import { useContext, useState } from 'react'
+import { GetServerSideProps } from 'next'
 import NextLink from 'next/link'
+import { useRouter } from 'next/router'
+import { signIn } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
 import axios from 'axios'
 import { useForm } from 'react-hook-form'
 import { Alert, Box, Button, Grid, Link, Snackbar, TextField, Typography } from '@mui/material'
 
 import { AuthLayout } from '@/components/layouts'
 import { validations } from '@/utils'
-import { tesloApi } from '@/api'
 import { AuthContext } from '@/context'
-import { useRouter } from 'next/router'
+import { authOptions } from '../api/auth/[...nextauth]'
 
 type formData = {
   password: string
@@ -37,8 +40,7 @@ const RegisterPage = () => {
       setIsRegisterError({ status: true, message: errorMessage })
       return
     }
-    const destination = router.query.page?.toString() || '/'
-    router.replace(destination)
+    await signIn('credentials', { email, password })
   }
 
   const previousPage = router.query.page?.toString() ? `?page=${router.query.page?.toString()}` : ''
@@ -114,6 +116,25 @@ const RegisterPage = () => {
       </Snackbar>
     </AuthLayout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerSession(ctx.req, ctx.res, authOptions)
+
+  const { page = '/' } = ctx.query
+
+  if (session) {
+    return {
+      redirect: {
+        destination: page.toString(),
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }
 
 export default RegisterPage

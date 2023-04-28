@@ -35,6 +35,11 @@ export const authOptions: AuthOptions = {
     signIn: '/auth/login',
     signOut: '/auth/register',
   },
+  session: {
+    maxAge: 2592000, //30d,
+    strategy: 'jwt',
+    updateAge: 86400, // 1d
+  },
   //TODO: fix tiping and do a further research on thiss
   callbacks: {
     async jwt({ token, account, user }: any) {
