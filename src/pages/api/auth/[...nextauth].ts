@@ -41,15 +41,13 @@ export const authOptions: AuthOptions = {
             token.user = user
             break
           case 'oauth':
-            //TODO: create or check if the user exists
-
+            token.user = await dbUser.OAuthToDbUSer(user.email, user.name)
             break
         }
       }
       return token
     },
     async session({ session, token, user }: any) {
-      console.log({ session, token, user })
       session.access_token = token.access_token
       session.user = token.user
       return session
