@@ -31,6 +31,10 @@ export const authOptions: AuthOptions = {
   //jwt: {
   //  secret: process.env.SECRET_KEY,
   //},
+  pages: {
+    signIn: '/auth/login',
+    signOut: '/auth/register',
+  },
   //TODO: fix tiping and do a further research on thiss
   callbacks: {
     async jwt({ token, account, user }: any) {

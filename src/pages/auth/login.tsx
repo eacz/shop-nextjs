@@ -1,13 +1,15 @@
-import { useContext, useState } from 'react'
+import { useState } from 'react'
+import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
-import axios from 'axios'
+import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { Alert, Box, Button, Grid, Link, Snackbar, TextField, Typography } from '@mui/material'
 
 import { AuthLayout } from '@/components/layouts'
 import { validations } from '@/utils'
-import { AuthContext } from '@/context'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '../api/auth/[...nextauth]'
 
 interface formData {
   email: string
@@ -18,7 +20,6 @@ const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<formData>()
   const router = useRouter()
@@ -26,18 +27,9 @@ const LoginPage = () => {
     status: false,
     message: '',
   })
-  const { login } = useContext(AuthContext)
 
   const onLogin = async ({ email, password }: formData) => {
-    setIsLoginError({ status: false, message: '' })
-    const res = await login(email, password)
-    if (axios.isAxiosError(res)) {
-      const errorMessage = res.response?.data?.message || 'Server error. Please contact support.'
-      setIsLoginError({ status: true, message: errorMessage })
-      return
-    }
-    const destination = router.query.page?.toString() || '/'
-    router.replace(destination)
+    await signIn('credentials', { email, password })
   }
 
   const previousPage = router.query.page?.toString() ? `?page=${router.query.page?.toString()}` : ''
@@ -101,6 +93,25 @@ const LoginPage = () => {
       </Snackbar>
     </AuthLayout>
   )
+}
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerSession(ctx.req, ctx.res, authOptions)
+
+  const { page = '/' } = ctx.query
+
+  if (session) {
+    return {
+      redirect: {
+        destination: page.toString(),
+        permanent: false,
+      },
+    }
+  }
+
+  return {
+    props: {},
+  }
 }
 
 export default LoginPage
