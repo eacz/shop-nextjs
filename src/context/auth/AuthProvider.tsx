@@ -1,6 +1,6 @@
 import { ReactNode, useEffect, useReducer } from 'react'
 import { useRouter } from 'next/router'
-import { useSession } from 'next-auth/react'
+import { useSession, signOut } from 'next-auth/react'
 import Cookies from 'js-cookie'
 
 import { AuthContext, AuthReducer } from '.'
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const logout = () => {
-    Cookies.remove('token')
+    //Cookies.remove('token')
     Cookies.remove('cart')
     Cookies.remove('firstname')
     Cookies.remove('lastname')
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     Cookies.remove('city')
     Cookies.remove('country')
     Cookies.remove('phone')
-    router.reload()
+    signOut()
   }
 
   const checkToken = async () => {
@@ -74,8 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (status === 'authenticated') {
-      
-      //dispatch({ type: '[Auth] - Login', payload: data.user as IUser })
+      dispatch({ type: '[Auth] - Login', payload: data.user as IUser })
     }
   }, [status, data])
 

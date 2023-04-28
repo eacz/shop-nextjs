@@ -3,6 +3,13 @@ import GithubProvider from 'next-auth/providers/github'
 import Credentials from 'next-auth/providers/credentials'
 import { dbUser } from '@/database'
 
+declare module 'next-auth' {
+  interface User {
+    _id: string
+    id?: string
+  }
+}
+
 export const authOptions: AuthOptions = {
   providers: [
     Credentials({
