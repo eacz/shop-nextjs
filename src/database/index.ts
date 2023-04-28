@@ -1,5 +1,5 @@
 export * as db from './db'
 export * as dbProducts from './dbProducts'
-
+export * as dbUser from './dbUser'
 export * as seedData from './seedData'
 export * from './constants'
