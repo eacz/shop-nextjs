@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import NextLink from 'next/link'
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material'
 
@@ -6,14 +6,23 @@ import { ShopLayout } from '@/components/layouts'
 import { CartList, OrderSummary } from '@/components/cart'
 import { CartContext } from '@/context'
 import { countries } from '@/utils'
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 
 const SummaryPage = () => {
+  const router = useRouter()
   const { address, cartSummary } = useContext(CartContext)
 
   const country = useMemo(
     () => countries.find((country) => country.code === address?.country)?.name,
     [address?.country]
   )
+
+  useEffect(() => {
+    if (!Cookies.get('firstname')) {
+      router.push('/checkout/address')
+    }
+  }, [router])
 
   if (!address) return <></>
 
