@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GetServerSideProps } from 'next'
 import { useRouter } from 'next/router'
 import NextLink from 'next/link'
-import { signIn } from 'next-auth/react'
+import { getProviders, signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
-import { Alert, Box, Button, Grid, Link, Snackbar, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Divider, Grid, Link, Snackbar, TextField, Typography } from '@mui/material'
 
 import { AuthLayout } from '@/components/layouts'
 import { validations } from '@/utils'
@@ -27,10 +27,17 @@ const LoginPage = () => {
     status: false,
     message: '',
   })
+  const [providers, setProviders] = useState<any>({})
 
   const onLogin = async ({ email, password }: formData) => {
     await signIn('credentials', { email, password })
   }
+
+  useEffect(() => {
+    getProviders().then((prov) => {
+      setProviders(prov)
+    })
+  }, [])
 
   const previousPage = router.query.page?.toString() ? `?page=${router.query.page?.toString()}` : ''
 
@@ -80,6 +87,24 @@ const LoginPage = () => {
                   You don&apos;t have an account?
                 </Link>
               </NextLink>
+            </Grid>
+            <Grid item xs={12} display='flex' flexDirection='column' justifyContent='end'>
+              <Divider sx={{ width: '100%', marginBottom: 2 }} />
+              {Object.values(providers).map((prov: any) => {
+                if (prov.id === 'credentials') return <div key={prov.id}></div>
+                return (
+                  <Button
+                    key={prov.id}
+                    variant='outlined'
+                    fullWidth
+                    color='primary'
+                    sx={{ mb: 1 }}
+                    onClick={() => signIn(prov.id)}
+                  >
+                    {prov.name}
+                  </Button>
+                )
+              })}
             </Grid>
           </Grid>
         </Box>
