@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 
 import { CartContext, CartReducer } from '.'
 import { ICartProduct, OrderSummary, Address } from '@/interfaces'
+import { tesloApi } from '@/api'
 
 export interface CartState {
   isLoaded: boolean
@@ -69,6 +70,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: '[Cart] - Update Address', payload: address })
   }
 
+  const createOrder = async () => {
+    try {
+      const { data } = await tesloApi.post('/orders', {})
+      console.log({ data })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   //Load initial state for cart from cookies
   useEffect(() => {
     try {
@@ -125,6 +135,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         updateCartQuantity,
         removeProductFromCart,
         setAddress,
+        createOrder,
       }}
     >
       {children}

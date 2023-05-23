@@ -11,12 +11,16 @@ import { useRouter } from 'next/router'
 
 const SummaryPage = () => {
   const router = useRouter()
-  const { address, cartSummary } = useContext(CartContext)
+  const { address, cartSummary, createOrder } = useContext(CartContext)
 
   const country = useMemo(
     () => countries.find((country) => country.code === address?.country)?.name,
     [address?.country]
   )
+
+  const onCreateOrder = () => {
+    createOrder()
+  }
 
   useEffect(() => {
     if (!Cookies.get('firstname')) {
@@ -77,7 +81,7 @@ const SummaryPage = () => {
 
               <OrderSummary />
               <Box sx={{ mt: 3 }}>
-                <Button color='secondary' className='circular-btn' fullWidth>
+                <Button color='secondary' className='circular-btn' fullWidth onClick={onCreateOrder}>
                   Confirm Order
                 </Button>
               </Box>
