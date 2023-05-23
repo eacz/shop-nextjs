@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useReducer } from 'react'
 import Cookies from 'js-cookie'
 
 import { CartContext, CartReducer } from '.'
-import { ICartProduct, OrderSummary, Address } from '@/interfaces'
+import { ICartProduct, OrderSummary, Address, IOrder } from '@/interfaces'
 import { tesloApi } from '@/api'
 
 export interface CartState {
@@ -71,8 +71,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const createOrder = async () => {
+    if (!state.address) {
+      throw new Error('There is no shipping address')
+    }
+
+    const payload: IOrder = {
+      orderItems: state.cart.map((product) => ({ ...product, size: product.size! })),
+      address: state.address,
+      numberOfItems: state.cartSummary.numberOfItems,
+      total: state.cartSummary.total,
+      subtotal: state.cartSummary.subtotal,
+      tax: state.cartSummary.tax,
+      isPaid: false,
+    }
+
     try {
-      const { data } = await tesloApi.post('/orders', {})
+      const { data } = await tesloApi.post('/orders', payload)
       console.log({ data })
     } catch (error) {
       console.log(error)

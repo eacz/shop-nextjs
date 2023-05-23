@@ -14,5 +14,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse<Data>)
 }
 
 const createRouteLoader = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
+  const body = req.body
+  console.log({ body })
+
   return res.status(201).json({ message: 'Test' })
 }

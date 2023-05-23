@@ -1,4 +1,4 @@
-import { Address, IUser, OrderSummary } from '.'
+import { Address, ISize, IUser, OrderSummary } from '.'
 
 export interface IOrder extends OrderSummary {
   _id?: string
@@ -13,9 +13,10 @@ export interface IOrder extends OrderSummary {
 export interface IOrderItem {
   _id: string
   title: string
-  size: string
+  size: ISize
   slug: string
   image: string
   price: number
   quantity: number
+  gender: string
 }
