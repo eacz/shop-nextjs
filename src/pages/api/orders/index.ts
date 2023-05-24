@@ -23,7 +23,6 @@ const createRouteLoader = async (req: NextApiRequest, res: NextApiResponse<Data>
   //Auth Check
   const session: any = await getServerSession(req, res, authOptions)
   if (!session) return res.status(401).json({ message: 'Unathorized' })
-  console.log(session);
   
 
   //Products Check

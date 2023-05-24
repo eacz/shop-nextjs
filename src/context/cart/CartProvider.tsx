@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import { CartContext, CartReducer } from '.'
 import { ICartProduct, OrderSummary, Address, IOrder } from '@/interfaces'
 import { tesloApi } from '@/api'
+import axios from 'axios'
 
 export interface CartState {
   isLoaded: boolean
@@ -70,7 +71,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: '[Cart] - Update Address', payload: address })
   }
 
-  const createOrder = async () => {
+  const createOrder = async (): Promise<{ hasError: boolean; message: string }> => {
     if (!state.address) {
       throw new Error('There is no shipping address')
     }
@@ -86,10 +87,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
 
     try {
-      const { data } = await tesloApi.post('/orders', payload)
-      console.log({ data })
+      const { data } = await tesloApi.post<IOrder>('/orders', payload)
+      //TODO: dispatch action
+      return {
+        hasError: false,
+        message: data._id!,
+      }
     } catch (error) {
-      console.log(error)
+      if (axios.isAxiosError(error)) {
+        return { hasError: true, message: error.response?.data.message }
+      }
+      return { hasError: true, message: 'Unhandled error' }
     }
   }
 
