@@ -88,7 +88,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     try {
       const { data } = await tesloApi.post<IOrder>('/orders', payload)
-      //TODO: dispatch action
+      dispatch({ type: '[Cart] - Create Order' })
+      Cookies.set('cart', JSON.stringify('[]'))
       return {
         hasError: false,
         message: data._id!,
